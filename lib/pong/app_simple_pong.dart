@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world/pong.dart';
+import 'pong.dart';
 
 void main() => runApp(PongApp());
 
