@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
+
 import 'ball.dart';
 import 'bat.dart';
 
@@ -29,20 +31,45 @@ class _PongState extends State<Pong> with SingleTickerProviderStateMixin {
   Direction vDir = Direction.down;
   Direction hDir = Direction.right;
 
-  final int incremental = 10;
+  double ranX = 1;
+  double ranY = 1;
+
+  int score = 0;
+
+  final int incremental = 5;
 
   void checkBorders() {
+    double diameter = 50;
+    // to left
     if (posX <= 0 && hDir == Direction.left) {
       hDir = Direction.right;
+      ranX = randomNumber();
     }
-    if (posX >= (width - 50) && hDir == Direction.right) {
+    // to right
+    if (posX >= (width - diameter) && hDir == Direction.right) {
       hDir = Direction.left;
+      ranX = randomNumber();
     }
-    if (posY >= (height - 50) && vDir == Direction.down) {
-      vDir = Direction.up;
+    // to bottom
+    if (posY >= (height - diameter) && vDir == Direction.down) {
+      //check if bat is here otherwise loose
+      if (posX >= (batPosition - diameter) &&
+          posX <= (batPosition + batWidth + diameter)) {
+        vDir = Direction.up;
+        ranY = randomNumber();
+
+        safeSetState(() {
+          score++;
+        });
+      } else {
+        controller.stop();
+        showMessage(context);
+      }
     }
+    // to top
     if (posY <= 0 && vDir == Direction.up) {
       vDir = Direction.down;
+      ranY = randomNumber();
     }
   }
 
@@ -64,9 +91,13 @@ class _PongState extends State<Pong> with SingleTickerProviderStateMixin {
     ).animate(controller);
 
     animation.addListener(() {
-      setState(() {
-        (hDir == Direction.right) ? posX += incremental : posX -= incremental;
-        (vDir == Direction.down) ? posY += incremental : posY -= incremental;
+      safeSetState(() {
+        (hDir == Direction.right)
+            ? posX += (incremental * ranX).round()
+            : posX -= (incremental * ranX).round();
+        (vDir == Direction.down)
+            ? posY += (incremental * ranY).round()
+            : posY -= (incremental * ranY).round();
       });
       checkBorders();
     });
@@ -77,7 +108,7 @@ class _PongState extends State<Pong> with SingleTickerProviderStateMixin {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     controller.dispose();
     super.dispose();
   }
@@ -97,6 +128,11 @@ class _PongState extends State<Pong> with SingleTickerProviderStateMixin {
 
         return Stack(
           children: <Widget>[
+            Positioned(
+              top: 0,
+              right: 24,
+              child: Text('Score: $score'),
+            ),
             Positioned(
               child: Ball(),
               top: posY,
@@ -121,8 +157,54 @@ class _PongState extends State<Pong> with SingleTickerProviderStateMixin {
   }
 
   void moveBat(DragUpdateDetails update) {
-    setState(() {
+    safeSetState(() {
       batPosition += update.delta.dx;
     });
+  }
+
+  void safeSetState(Function function) {
+    if (mounted && controller.isAnimating) {
+      setState(() {
+        function();
+      });
+    }
+  }
+
+  double randomNumber() {
+    //this is random number between 0.5 - 1.5
+    var ran = Random();
+    int myNum = ran.nextInt(101);
+    return (50 + myNum) / 100;
+  }
+
+  void showMessage(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+              title: Text('Game Over'),
+              content: Text('Would you like to play again'),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    setState(() {
+                      posX = 0;
+                      posY = 0;
+                      score = 0;
+                    });
+                    Navigator.of(context).pop();
+                    controller.repeat();
+                  },
+                  child: Text('Yes'),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    dispose();
+                  },
+                  child: Text('No'),
+                ),
+              ]);
+        });
   }
 }
