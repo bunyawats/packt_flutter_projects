@@ -1,2 +1,2 @@
 # packt_flutter_projects
- lrean packt flutter projects
+ learn packt flutter projects
