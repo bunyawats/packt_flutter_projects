@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webstorage/webstorage.dart';
-import 'package:hello_world/widgets.dart';
+import 'package:hello_world/productivity/widgets.dart';
 
 class SettingScreen extends StatelessWidget {
   @override
