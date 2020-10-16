@@ -13,6 +13,10 @@ class _MovieListState extends State<MovieList> {
   int movieCount;
   List movies;
 
+  final String iconBase = 'https://image.tmdb.org/t/p/w92';
+  final String defaultImage =
+      'https://images.freeimages.com/images/large-previews/5eb/movie-clapboard-1184339.jpg';
+
   @override
   void initState() {
     result = '';
@@ -32,6 +36,7 @@ class _MovieListState extends State<MovieList> {
 
   @override
   Widget build(BuildContext context) {
+    NetworkImage image;
     return Scaffold(
       appBar: AppBar(
         title: Text('Movies'),
@@ -39,6 +44,11 @@ class _MovieListState extends State<MovieList> {
       body: ListView.builder(
           itemCount: (this.movieCount != null) ? this.movieCount : 0,
           itemBuilder: (BuildContext context, int position) {
+            if (movies[position].posterPath != null) {
+              image = NetworkImage(iconBase + movies[position].posterPath);
+            } else {
+              image = NetworkImage(defaultImage);
+            }
             return Card(
               color: Colors.white,
               elevation: 2.0,
@@ -46,6 +56,9 @@ class _MovieListState extends State<MovieList> {
                 title: Text(movies[position].title),
                 subtitle: Text(
                     'Released: ${movies[position].releaseDate} - Votes ${movies[position].voteAverage}'),
+                leading: CircleAvatar(
+                  backgroundImage: image,
+                ),
               ),
             );
           }),
