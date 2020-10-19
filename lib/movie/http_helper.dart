@@ -10,12 +10,28 @@ class HttpHelper {
   final String urlUpcoming = '/upcoming?';
   final String urlLanguage = '&language=en-US';
 
+  final String urlSearhBase = 'https://api.themoviedb.org/3/search/movie?';
+  final String urlQuery = '&query=';
+
   Future<List> getUpcoming() async {
     final String upcoming = baseUrl + urlUpcoming + urlKey + urlLanguage;
     print('upcoming: $upcoming');
 
     http.Response result = await http.get(upcoming);
 
+    if (result.statusCode == HttpStatus.ok) {
+      final jsonResponse = json.decode(result.body);
+      final movieMap = jsonResponse['results'];
+      List movies = movieMap.map((item) => Movie.formJson(item)).toList();
+      return movies;
+    } else {
+      return null;
+    }
+  }
+
+  Future<List> findMovies(String title) async {
+    final String queryUrl = urlSearhBase + urlKey + urlQuery + title;
+    http.Response result = await http.get(queryUrl);
     if (result.statusCode == HttpStatus.ok) {
       final jsonResponse = json.decode(result.body);
       final movieMap = jsonResponse['results'];
