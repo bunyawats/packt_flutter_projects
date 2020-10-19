@@ -88,25 +88,47 @@ class _MovieListState extends State<MovieList> {
             } else {
               image = NetworkImage(defaultImage);
             }
-            return Card(
-              color: Colors.white,
-              elevation: 2.0,
-              child: ListTile(
-                title: Text(movies[position].title),
-                subtitle: Text(
-                    'Released: ${movies[position].releaseDate} - Votes ${movies[position].voteAverage}'),
-                leading: CircleAvatar(
-                  backgroundImage: image,
-                ),
-                onTap: () {
-                  MaterialPageRoute route = MaterialPageRoute(
-                    builder: (_) => MovieDetail(movies[position]),
-                  );
-                  Navigator.push(context, route);
-                },
-              ),
+            return MovieCard(
+              movies: movies,
+              image: image,
+              position: position,
             );
           }),
+    );
+  }
+}
+
+class MovieCard extends StatelessWidget {
+  const MovieCard({
+    Key key,
+    @required this.movies,
+    @required this.image,
+    @required this.position,
+  }) : super(key: key);
+
+  final List movies;
+  final NetworkImage image;
+  final int position;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: Colors.white,
+      elevation: 2.0,
+      child: ListTile(
+        title: Text(movies[position].title),
+        subtitle: Text(
+            'Released: ${movies[position].releaseDate} - Votes ${movies[position].voteAverage}'),
+        leading: CircleAvatar(
+          backgroundImage: image,
+        ),
+        onTap: () {
+          MaterialPageRoute route = MaterialPageRoute(
+            builder: (_) => MovieDetail(movies[position]),
+          );
+          Navigator.push(context, route);
+        },
+      ),
     );
   }
 }
