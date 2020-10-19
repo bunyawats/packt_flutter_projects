@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/movie/movie_detail.dart';
 import 'http_helper.dart';
 
 class MovieList extends StatefulWidget {
@@ -59,6 +60,12 @@ class _MovieListState extends State<MovieList> {
                 leading: CircleAvatar(
                   backgroundImage: image,
                 ),
+                onTap: () {
+                  MaterialPageRoute route = MaterialPageRoute(
+                    builder: (_) => MovieDetail(movies[position]),
+                  );
+                  Navigator.push(context, route);
+                },
               ),
             );
           }),
