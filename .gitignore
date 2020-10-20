@@ -25,8 +25,4 @@ doc/api/
 *.js.map
 .DS_Store
 .flutter-plugins-dependencies
-.DS_Store
-.DS_Store
-.flutter-plugins-dependencies
-.flutter-plugins-dependencies
 .flutter-plugins
