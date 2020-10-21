@@ -74,4 +74,16 @@ class DbHelper {
         );
     return id;
   }
+
+  Future<List<ShoppingList>> getLists() async {
+    final List<Map<String, dynamic>> maps = await db.query('lists');
+
+    return List.generate(maps.length, (index) {
+      return ShoppingList(
+        maps[index]['id'],
+        maps[index]['name'],
+        maps[index]['proority'],
+      );
+    });
+  }
 }
