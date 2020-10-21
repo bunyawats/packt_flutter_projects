@@ -6,6 +6,8 @@ import 'models/list_items.dart';
 void main() => runApp(ShoppingListApp());
 
 class ShoppingListApp extends StatelessWidget {
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -25,26 +27,38 @@ class ShList extends StatefulWidget {
 }
 
 class _ShListState extends State<ShList> {
-
   DbHelper helper = DbHelper();
+  List<ShoppingList> shoppingList;
 
   Future showData() async {
     await helper.openDb();
+    shoppingList = await helper.getLists();
+    setState(() {
+      shoppingList = shoppingList;
+    });
+  }
 
-    ShoppingList list = ShoppingList(0, 'Bakery', 2);
-    int listId = await helper.insertList(list);
-
-    ListItem item = ListItem(0, listId, 'Bread', 'noted', 'i kg');
-    int itemId = await helper.insertItem(item);
-
-    print('List id: $listId');
-    print('Item id: $itemId');
+  @override
+  void initState() {
+    helper.testDb();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     showData();
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Shopping List'),
+      ),
+      body: ListView.builder(
+        itemCount: (shoppingList != null) ? shoppingList.length : 0,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text(shoppingList[index].name),
+          );
+        },
+      ),
+    );
   }
 }

@@ -53,6 +53,13 @@ class DbHelper {
     List lists = await db.rawQuery('SELECT * FROM lists');
     List items = await db.rawQuery('SELECT * FROM items');
 
+    ShoppingList list = ShoppingList(0, 'Bakery', 2);
+    int listId = await insertList(list);
+    ListItem item = ListItem(0, listId, 'Bread', 'note', '1 kg');
+    int itemId = await insertItem(item);
+    print('List Id: ' + listId.toString());
+    print('Item Id: '+ itemId.toString());
+
     print(lists[0].toString());
     print(items[0].toString());
   }
@@ -82,7 +89,7 @@ class DbHelper {
       return ShoppingList(
         maps[index]['id'],
         maps[index]['name'],
-        maps[index]['proority'],
+        maps[index]['priority'],
       );
     });
   }
