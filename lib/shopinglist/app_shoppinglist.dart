@@ -56,32 +56,45 @@ class _ShListState extends State<ShList> {
       body: ListView.builder(
         itemCount: (shoppingList != null) ? shoppingList.length : 0,
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text(shoppingList[index].name),
-            leading: CircleAvatar(
-              child: Text(
-                shoppingList[index].priority.toString(),
+          return Dismissible(
+            child: ListTile(
+              title: Text(shoppingList[index].name),
+              leading: CircleAvatar(
+                child: Text(
+                  shoppingList[index].priority.toString(),
+                ),
+              ),
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => dialog.buildDialog(
+                      context,
+                      shoppingList[index],
+                      false,
+                    ),
+                  );
+                },
+              ),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ItemsScreen(shoppingList[index]),
+                ),
               ),
             ),
-            trailing: IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) => dialog.buildDialog(
-                    context,
-                    shoppingList[index],
-                    false,
-                  ),
-                );
-              },
-            ),
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ItemsScreen(shoppingList[index]),
-              ),
-            ),
+            key: Key(shoppingList[index].name),
+            onDismissed: (direction) {
+              String strName = shoppingList[index].name;
+              helper.deleteList(shoppingList[index]);
+              setState(() {
+                shoppingList.removeAt(index);
+              });
+              Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text('$strName deleted'),
+              ));
+            },
           );
         },
       ),
