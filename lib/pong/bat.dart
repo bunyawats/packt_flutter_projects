@@ -1,8 +1,6 @@
-
 import 'package:flutter/material.dart';
 
 class Bat extends StatelessWidget {
-
   final double width;
   final double height;
 
@@ -10,7 +8,6 @@ class Bat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: width,
       height: height,

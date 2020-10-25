@@ -5,13 +5,13 @@ class ListItem {
   String quantity;
   String note;
 
-  ListItem(
+  ListItem({
     this.id,
     this.idList,
     this.name,
     this.quantity,
     this.note,
-  );
+  });
 
   Map<String, dynamic> toMap() {
     return {

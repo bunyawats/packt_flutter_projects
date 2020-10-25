@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -8,6 +7,14 @@ import '../models/shopping_list.dart';
 class DbHelper {
   final int version = 1;
   Database db;
+
+  static final DbHelper _dbHelper = DbHelper._internal();
+
+  DbHelper._internal();
+
+  factory DbHelper() {
+    return _dbHelper;
+  }
 
   Future<Database> openDb() async {
     if (db == null) {
@@ -53,12 +60,22 @@ class DbHelper {
     List lists = await db.rawQuery('SELECT * FROM lists');
     List items = await db.rawQuery('SELECT * FROM items');
 
-    ShoppingList list = ShoppingList(0, 'Bakery', 2);
-    int listId = await insertList(list);
-    ListItem item = ListItem(0, listId, 'Bread', 'note', '1 kg');
+    ShoppingList list = ShoppingList(
+      id: 0,
+      name: 'Bakery',
+      priority: 2,
+    );
+    int idList = await insertList(list);
+    ListItem item = ListItem(
+      id: 0,
+      idList: idList,
+      name: 'Bread',
+      quantity: 'note',
+      note: '1 kg',
+    );
     int itemId = await insertItem(item);
-    print('List Id: ' + listId.toString());
-    print('Item Id: '+ itemId.toString());
+    print('List Id: ' + idList.toString());
+    print('Item Id: ' + itemId.toString());
 
     print(lists[0].toString());
     print(items[0].toString());
@@ -87,10 +104,31 @@ class DbHelper {
 
     return List.generate(maps.length, (index) {
       return ShoppingList(
-        maps[index]['id'],
-        maps[index]['name'],
-        maps[index]['priority'],
+        id: maps[index]['id'],
+        name: maps[index]['name'],
+        priority: maps[index]['priority'],
       );
     });
+  }
+
+  Future<List<ListItem>> getItems(int idList) async {
+    final List<Map<String, dynamic>> maps = await db.query(
+      'items',
+      where: 'idList = ?',
+      whereArgs: [idList],
+    );
+
+    return List.generate(
+      maps.length,
+      (index) {
+        return ListItem(
+          id: maps[index]['id'],
+          idList: maps[index]['idList,'],
+          name: maps[index]['name'],
+          quantity: maps[index]['quantity'],
+          note: maps[index]['note'],
+        );
+      },
+    );
   }
 }

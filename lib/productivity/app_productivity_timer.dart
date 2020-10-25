@@ -186,14 +186,12 @@ class WorkIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-       // initialData: null,
+        // initialData: null,
         stream: timer.stream(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
-
           // print('snapshot: $snapshot');
-          TimerModel timerModel = (snapshot.data == null )
-              ? TimerModel('00:00', 1)
-              : snapshot.data;
+          TimerModel timerModel =
+              (snapshot.data == null) ? TimerModel('00:00', 1) : snapshot.data;
 
           return CircularPercentIndicator(
             radius: availableWidth / 2,

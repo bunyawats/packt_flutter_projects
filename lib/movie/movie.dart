@@ -6,9 +6,10 @@ class Movie {
   String overview;
   String posterPath;
 
-  Movie(this.id, this.title, this.voteAverage, this.releaseDate, this.overview, this.posterPath);
+  Movie(this.id, this.title, this.voteAverage, this.releaseDate, this.overview,
+      this.posterPath);
 
-  Movie.formJson(Map <String, dynamic> parsedJson){
+  Movie.formJson(Map<String, dynamic> parsedJson) {
     this.id = parsedJson['id'];
     this.title = parsedJson['title'];
     this.voteAverage = parsedJson['vote_average'].toDouble();
@@ -16,5 +17,4 @@ class Movie {
     this.overview = parsedJson['overview'];
     this.posterPath = parsedJson['poster_path'];
   }
-
 }

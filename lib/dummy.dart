@@ -7,7 +7,6 @@ void main() {
 
   print(resultText);
 
-
   var songs = List();
 
   songs.add('We will rock you');
@@ -40,5 +39,3 @@ String reverse(String text) {
 }
 
 bool convertYoBool(int value) => (value == 0) ? false : true;
-
-

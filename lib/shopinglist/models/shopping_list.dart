@@ -3,11 +3,11 @@ class ShoppingList {
   String name;
   int priority;
 
-  ShoppingList(
+  ShoppingList({
     this.id,
     this.name,
     this.priority,
-  );
+  });
 
   Map<String, dynamic> toMap() {
     return {
