@@ -85,6 +85,20 @@ class _ShListState extends State<ShList> {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => dialog.buildDialog(
+              context,
+              ShoppingList(id: 0, name: '', priority: 0),
+              true,
+            ),
+          );
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.pink,
+      ),
     );
   }
 }

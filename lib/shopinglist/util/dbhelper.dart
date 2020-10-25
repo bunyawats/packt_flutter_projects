@@ -53,9 +53,9 @@ class DbHelper {
     await db.execute('DELETE FROM lists');
     await db.execute('DELETE FROM items');
 
-    await db.execute('INSERT INTO lists VALUES ( 0, "Fruit", 2)');
+    await db.execute('INSERT INTO lists VALUES ( 1, "Fruit", 2)');
     await db.execute(
-        'INSERT INTO items VALUES(0,0, "Apples", "2 Kg", "Better if they are green")');
+        'INSERT INTO items VALUES(1 , 1 , "Apples", "2 Kg", "Better if they are green")');
 
     List lists = await db.rawQuery('SELECT * FROM lists');
     List items = await db.rawQuery('SELECT * FROM items');
