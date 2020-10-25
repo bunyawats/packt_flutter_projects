@@ -31,14 +31,18 @@ class ShoppingListDialog {
             TextField(
               controller: txtPriority,
               keyboardType: TextInputType.number,
-              decoration:
-                  InputDecoration(hintText: 'Shopping List Priority (1-3)'),
+              decoration: InputDecoration(
+                hintText: 'Shopping List Priority (1-3)',
+              ),
             ),
             RaisedButton(
               child: Text('Save Shopping List'),
               onPressed: () {
                 list.name = txtName.text;
                 list.priority = int.parse(txtPriority.text);
+
+                print('on save shopping list $isNew');
+
                 helper.insertList(list);
                 Navigator.pop(context);
               },

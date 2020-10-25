@@ -16,4 +16,7 @@ class ShoppingList {
       'priority': priority,
     };
   }
+
+  @override
+  String toString() => 'ListItem: id:$id,  name:$name, quantity:$priority }';
 }

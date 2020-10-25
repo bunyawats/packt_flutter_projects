@@ -104,7 +104,11 @@ class _ShListState extends State<ShList> {
             context: context,
             builder: (BuildContext context) => dialog.buildDialog(
               context,
-              ShoppingList(id: 0, name: '', priority: 0),
+              ShoppingList(
+                id: 0,
+                name: '',
+                priority: 0,
+              ),
               true,
             ),
           );

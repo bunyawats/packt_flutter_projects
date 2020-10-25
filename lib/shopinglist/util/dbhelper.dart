@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -53,35 +54,53 @@ class DbHelper {
     await db.execute('DELETE FROM lists');
     await db.execute('DELETE FROM items');
 
-    await db.execute('INSERT INTO lists VALUES ( 1, "Fruit", 2)');
-    await db.execute(
-        'INSERT INTO items VALUES(1 , 1 , "Apples", "2 Kg", "Better if they are green")');
-
-    List lists = await db.rawQuery('SELECT * FROM lists');
-    List items = await db.rawQuery('SELECT * FROM items');
+    // await db.execute('INSERT INTO lists VALUES ( 1, "Fruit", 2)');
+    // await db.execute(
+    //     'INSERT INTO items VALUES(1 , 1 , "Apples", "2 Kg", "Better if they are green")');
 
     ShoppingList list = ShoppingList(
+      id: 0,
+      name: 'Fruit',
+      priority: 3,
+    );
+    int idList = await insertList(list);
+    ListItem item = ListItem(
+      id: 0,
+      idList: idList,
+      name: 'Apples',
+      quantity: '2 Kg',
+      note: 'Better if they are green',
+    );
+    int itemId = await insertItem(item);
+
+    list = ShoppingList(
       id: 0,
       name: 'Bakery',
       priority: 2,
     );
-    int idList = await insertList(list);
-    ListItem item = ListItem(
+    idList = await insertList(list);
+    item = ListItem(
       id: 0,
       idList: idList,
       name: 'Bread',
       quantity: 'note',
       note: '1 kg',
     );
-    int itemId = await insertItem(item);
-    print('List Id: ' + idList.toString());
-    print('Item Id: ' + itemId.toString());
+    itemId = await insertItem(item);
 
-    print(lists[0].toString());
-    print(items[0].toString());
+    List lists = await db.rawQuery('SELECT * FROM lists');
+    List items = await db.rawQuery('SELECT * FROM items');
+
+    lists.forEach((element) { print(element);});
+    items.forEach((element) { print(element);});
+
+    print('\n');
   }
 
   Future<int> insertList(ShoppingList list) async {
+
+    print('on insert list $list');
+
     int id = await this.db.insert(
           'lists',
           list.toMap(),
@@ -91,6 +110,8 @@ class DbHelper {
   }
 
   Future<int> insertItem(ListItem item) async {
+    print('on insert item $item');
+
     int id = await this.db.insert(
           'items',
           item.toMap(),
@@ -123,7 +144,7 @@ class DbHelper {
       (index) {
         return ListItem(
           id: maps[index]['id'],
-          idList: maps[index]['idList,'],
+          idList: maps[index]['idList'],
           name: maps[index]['name'],
           quantity: maps[index]['quantity'],
           note: maps[index]['note'],
@@ -142,6 +163,16 @@ class DbHelper {
       'lists',
       where: ' id = ? ',
       whereArgs: [list.id],
+    );
+
+    return result;
+  }
+
+  Future<int> deleteItem(ListItem item) async {
+    int result = await db.delete(
+      'items',
+      where: ' id =  ?',
+      whereArgs: [item.id],
     );
 
     return result;
