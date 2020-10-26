@@ -18,5 +18,5 @@ class ShoppingList {
   }
 
   @override
-  String toString() => 'ListItem: id:$id,  name:$name, quantity:$priority }';
+  String toString() => 'ShoppingList: id:$id,  name:$name, quantity:$priority';
 }

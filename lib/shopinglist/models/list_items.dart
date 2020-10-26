@@ -24,6 +24,6 @@ class ListItem {
   }
 
   @override
-  String toString() => 'ListItem: id:$id, idList:$idList, name:$name, quantity:$quantity, note:$note }';
+  String toString() => 'ListItem: id:$id, idList:$idList, name:$name, quantity:$quantity, note:$note';
 
 }
