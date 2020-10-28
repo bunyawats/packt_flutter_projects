@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import './screens/event_screen.dart';
 
 void main() => runApp(FireBaseApp());
 
@@ -16,14 +17,14 @@ class FireBaseApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    testData();
+    // testData();
 
     return MaterialApp(
       title: 'Events',
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: Scaffold(),
+      home: EventScreen(),
     );
   }
 }
