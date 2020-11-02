@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../shared/authentication.dart';
+import 'event_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -15,10 +17,38 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPassword = TextEditingController();
 
+  Authentication auth;
+
+  @override
+  void initState() {
+    auth = Authentication();
+    super.initState();
+  }
+
   Future submit() async {
     setState(() {
       _message = '';
     });
+
+    try {
+      if (_isLogin) {
+        _userId = await auth.login(txtEmail.text, txtPassword.text);
+        print('Login for user $_userId');
+      } else {
+        _userId = await auth.signUp(txtEmail.text, txtPassword.text);
+        print('Sign up for user $_userId');
+      }
+      if (_userId != null) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => EventScreen()));
+      }
+    } catch (e) {
+      print('Error: $e');
+      setState(() {
+        _message = e.message;
+        //_formKey.currentState.reset();
+      });
+    }
   }
 
   Widget emailInput() {
