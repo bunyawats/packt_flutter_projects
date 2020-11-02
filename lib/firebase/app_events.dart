@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import './screens/login_screen.dart';
-import './screens/event_screen.dart';
+import './screens/launch_screen.dart';
 
 void main() => runApp(FireBaseApp());
 
@@ -25,7 +24,7 @@ class FireBaseApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: LoginScreen(),
+      home: LaunchScreen(),
     );
   }
 }

@@ -15,8 +15,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController txtEmail = TextEditingController();
   final TextEditingController txtPassword = TextEditingController();
 
-  Future submit() {
-    return null;
+  Future submit() async {
+    setState(() {
+      _message = '';
+    });
   }
 
   Widget emailInput() {
