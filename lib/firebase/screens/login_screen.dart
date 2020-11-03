@@ -40,7 +40,10 @@ class _LoginScreenState extends State<LoginScreen> {
       }
       if (_userId != null) {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => EventScreen()));
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventScreen(_userId),
+            ));
       }
     } catch (e) {
       print('Error: $e');

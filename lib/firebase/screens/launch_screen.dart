@@ -16,9 +16,13 @@ class _LaunchScreenState extends State<LaunchScreen> {
     auth.getUser().then((user) {
       MaterialPageRoute route;
       if (user != null) {
-        route = MaterialPageRoute(builder: (context) => EventScreen());
+        route = MaterialPageRoute(
+          builder: (context) => EventScreen(user.uid),
+        );
       } else {
-        route = MaterialPageRoute(builder: (context) => LoginScreen());
+        route = MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        );
       }
       Navigator.pushReplacement(context, route);
     }).catchError((err) => print(err));
