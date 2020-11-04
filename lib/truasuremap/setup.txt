@@ -6,3 +6,6 @@
         - package name: com.ssc.events_book
         - SHA-1 certificate fingerprint: 0F:A9:CD:E8:5F:6B:16:EB:4B:A4:3F:85:74:F7:7C:F1:59:08:40:81
     - API Key: AIzaSyDUvjeiqyNReaI09g-4K_7-sXuLXOAvIog
+- Add API Key to AndroidManifest.xml:
+    <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyDUvjeiqyNReaI09g-4K_7-sXuLXOAvIog"/>
