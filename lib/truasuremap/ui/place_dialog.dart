@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:webdriver/async_core.dart';
-
 import '../models/place.dart';
 import '../helpers/dbhelper.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hello_world/truasuremap/ui/manage_places.dart';
 import 'package:hello_world/truasuremap/ui/place_dialog.dart';
 import './helpers/dbhelper.dart';
 import './models/place.dart';
@@ -114,6 +115,17 @@ class _MainMapState extends State<MainMap> {
     return Scaffold(
       appBar: AppBar(
         title: Text('The Treasure Map'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.list),
+            onPressed: () {
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (context) => ManagePlace(),
+              );
+              Navigator.push(context, route);
+            },
+          )
+        ],
       ),
       body: Container(
         child: GoogleMap(

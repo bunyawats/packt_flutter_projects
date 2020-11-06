@@ -88,4 +88,15 @@ class DbHelper {
         );
     return id;
   }
+
+  Future<int> deletePlace(Place place) async {
+    int result = await this.db.delete(
+      'places',
+      where: 'id = ?',
+      whereArgs: [
+        place.id,
+      ],
+    );
+    return result;
+  }
 }
