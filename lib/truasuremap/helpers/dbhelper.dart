@@ -39,13 +39,21 @@ class DbHelper {
     return db;
   }
 
+  Future deleteMockData() async {
+    db = await openDb();
+    await db.execute('''
+    DELETE FROM places
+    ''');
+    print('delete all places records');
+  }
+
   Future insertMockData() async {
     db = await openDb();
     await db.execute('''
     INSERT INTO places VALUES (1, "Beautiful park", 13.765, 100.563, "")
     ''');
     await db.execute('''
-    INSERT INTO places VALUES (2, "Best Pizza in the world", 13.7646, 100.564, "")
+    INSERT INTO places VALUES (2, "Best Pizza in the world", 13.766, 100.564, "")
     ''');
     await db.execute('''
     INSERT INTO places VALUES (3, "The best icecream on earth", 13.767, 100.565, "")
@@ -53,7 +61,7 @@ class DbHelper {
     List places = await db.rawQuery('''
     SELECT * FROM places
     ''');
-    print(places[0].toString());
+    print('places: $places');
   }
 
   Future<List<Place>> getPlaces() async {

@@ -73,6 +73,10 @@ class _MainMapState extends State<MainMap> {
 
   Future _getData() async {
     await helper.openDb();
+    await this.helper.deleteMockData();
+    await this.helper.insertMockData();
+
+    // await helper.deleteMockData();
     List places = await helper.getPlaces();
     for (Place p in places) {
       addMarker(
@@ -92,9 +96,8 @@ class _MainMapState extends State<MainMap> {
   @override
   void initState() {
     this.helper = DbHelper();
-    this.helper.insertMockData();
-    _getData();
 
+    _getData();
     _getCurrentLocation()
         .then(
           (pos) => addMarker(pos, 'currpos', 'You are here!'),
