@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hello_world/truasuremap/ui/place_dialog.dart';
 import './helpers/dbhelper.dart';
 import './models/place.dart';
 
@@ -119,6 +120,27 @@ class _MainMapState extends State<MainMap> {
           initialCameraPosition: position,
           markers: Set<Marker>.of(markers),
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add_location),
+        onPressed: () {
+          int here = markers.indexWhere(
+            (p) => p.markerId == MarkerId('currpos'),
+          );
+          Place place;
+          if (here == -1) {
+            //the current position is not available
+            place = Place(0, '', 0, 0, '');
+          } else {
+            LatLng pos = markers[here].position;
+            place = Place(0, '', pos.latitude, pos.longitude, '');
+          }
+          PlaceDialog dialog = PlaceDialog(place, true);
+          showDialog(
+            context: context,
+            builder: (context) => dialog.buildAlert(context),
+          );
+        },
       ),
     );
   }

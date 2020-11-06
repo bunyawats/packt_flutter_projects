@@ -78,4 +78,13 @@ class DbHelper {
     });
     return this.places;
   }
+
+  Future<int> insertPlace(Place place) async {
+    int id = await this.db.insert(
+          'places',
+          place.toMap(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+    return id;
+  }
 }
