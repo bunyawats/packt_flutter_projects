@@ -22,4 +22,9 @@ class Place {
       'image': image
     };
   }
+
+  @override
+  String toString() {
+    return 'id: $id, name: $name, lat: $lat, lon: $lon, image: $image';
+  }
 }

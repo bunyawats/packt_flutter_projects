@@ -80,6 +80,7 @@ class DbHelper {
   }
 
   Future<int> insertPlace(Place place) async {
+    print('save place: $place');
     int id = await this.db.insert(
           'places',
           place.toMap(),
