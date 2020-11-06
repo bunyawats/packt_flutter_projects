@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import './helpers/dbhelper.dart';
+import './models/place.dart';
 
 void main() => runApp(MapApp());
 
@@ -24,6 +26,7 @@ class MainMap extends StatefulWidget {
 
 class _MainMapState extends State<MainMap> {
   List<Marker> markers = [];
+  DbHelper helper;
 
   final CameraPosition position = CameraPosition(
     target: LatLng(13.764, 100.568),
@@ -61,7 +64,26 @@ class _MainMapState extends State<MainMap> {
           ? BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure)
           : BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueOrange),
     );
+    print('addMarker: $marker');
     markers.add(marker);
+    setState(() {
+      markers = markers;
+    });
+  }
+
+  Future _getData() async {
+    await helper.openDb();
+    List places = await helper.getPlaces();
+    for (Place p in places) {
+      addMarker(
+        Position(
+          latitude: p.lat,
+          longitude: p.lon,
+        ),
+        p.id.toString(),
+        p.name,
+      );
+    }
     setState(() {
       markers = markers;
     });
@@ -69,6 +91,10 @@ class _MainMapState extends State<MainMap> {
 
   @override
   void initState() {
+    this.helper = DbHelper();
+    this.helper.insertMockData();
+    _getData();
+
     _getCurrentLocation()
         .then(
           (pos) => addMarker(pos, 'currpos', 'You are here!'),
