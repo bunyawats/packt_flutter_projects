@@ -13,7 +13,10 @@ class PlaceDialog {
 
   PlaceDialog(this.place, this.isNew);
 
-  Widget buildAlert(BuildContext context) {
+  Widget buildAlert(
+    BuildContext context,
+    void Function() refreshList,
+  ) {
     DbHelper helper = DbHelper();
 
     txtName.text = place.name;
@@ -50,6 +53,7 @@ class PlaceDialog {
                 place.lat = double.parse(txtLat.text);
                 place.lon = double.parse(txtLon.text);
                 helper.insertPlace(place);
+                refreshList();
                 Navigator.pop(context);
               },
             ),

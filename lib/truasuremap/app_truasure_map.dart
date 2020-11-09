@@ -75,10 +75,9 @@ class _MainMapState extends State<MainMap> {
 
   Future _getData() async {
     await helper.openDb();
-    await this.helper.deleteMockData();
-    await this.helper.insertMockData();
+    // await this.helper.deleteMockData();
+    // await this.helper.insertMockData();
 
-    // await helper.deleteMockData();
     List places = await helper.getPlaces();
     for (Place p in places) {
       addMarker(
@@ -98,20 +97,14 @@ class _MainMapState extends State<MainMap> {
   @override
   void initState() {
     this.helper = DbHelper();
-
-    _getData();
-    _getCurrentLocation()
-        .then(
-          (pos) => addMarker(pos, 'currpos', 'You are here!'),
-        )
-        .catchError(
-          (err) => print(err.toString()),
-        );
+    this.redrawMarker();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('On build _MainMapState');
+
     return Scaffold(
       appBar: AppBar(
         title: Text('The Treasure Map'),
@@ -122,7 +115,11 @@ class _MainMapState extends State<MainMap> {
               MaterialPageRoute route = MaterialPageRoute(
                 builder: (context) => ManagePlace(),
               );
-              Navigator.push(context, route);
+              Navigator.push(context, route).then(
+                (value) {
+                  redrawMarker();
+                },
+              );
             },
           )
         ],
@@ -150,10 +147,21 @@ class _MainMapState extends State<MainMap> {
           PlaceDialog dialog = PlaceDialog(place, true);
           showDialog(
             context: context,
-            builder: (context) => dialog.buildAlert(context),
+            builder: (context) => dialog.buildAlert(
+              context,
+              redrawMarker,
+            ),
           );
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
+  }
+
+  void redrawMarker() async {
+    markers = [];
+    Position position = await _getCurrentLocation();
+    addMarker(position, 'currpos', 'You are here!');
+    await _getData();
   }
 }

@@ -22,6 +22,12 @@ class PlaceList extends StatefulWidget {
 class _PlaceListState extends State<PlaceList> {
   DbHelper helper = DbHelper();
 
+  void refreshList() {
+    setState(() {
+      helper.places = helper.places;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -52,7 +58,10 @@ class _PlaceListState extends State<PlaceList> {
                 );
                 showDialog(
                   context: context,
-                  builder: (context) => dialog.buildAlert(context),
+                  builder: (context) => dialog.buildAlert(
+                    context,
+                    refreshList,
+                  ),
                 );
               },
             ),
