@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'picture_screen.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/place.dart';
@@ -9,7 +10,7 @@ class CameraScreen extends StatefulWidget {
   CameraScreen(this.place);
 
   @override
-  _CameraScreenState createState() => _CameraScreenState();
+  _CameraScreenState createState() => _CameraScreenState(place);
 }
 
 class _CameraScreenState extends State<CameraScreen> {
@@ -20,6 +21,8 @@ class _CameraScreenState extends State<CameraScreen> {
   CameraDescription camera;
   Widget cameraPreview;
   Image image;
+
+  _CameraScreenState(this.place);
 
   @override
   void initState() {
@@ -62,6 +65,22 @@ class _CameraScreenState extends State<CameraScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Take Picture'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.camera_alt),
+            onPressed: () async {
+              final path = join(
+                (await getTemporaryDirectory()).path,
+                '${DateTime.now()}.png',
+              );
+              await _controller.takePicture(path);
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (context) => PictureScreen(path, place),
+              );
+              Navigator.push(context, route);
+            },
+          ),
+        ],
       ),
       body: Container(
         child: cameraPreview,

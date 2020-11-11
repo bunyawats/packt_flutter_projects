@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'camera_screen.dart';
 import '../models/place.dart';
@@ -47,6 +47,9 @@ class PlaceDialog {
                 hintText: 'Longitude',
               ),
             ),
+            (place.image != null)
+                ? Container(child: Image.file(File(place.image)))
+                : Container(),
             IconButton(
               icon: Icon(Icons.camera_front),
               onPressed: () {
