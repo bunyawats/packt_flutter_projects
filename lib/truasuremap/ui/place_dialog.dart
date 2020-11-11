@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'camera_screen.dart';
 import '../models/place.dart';
 import '../helpers/dbhelper.dart';
 
@@ -45,6 +46,25 @@ class PlaceDialog {
               decoration: InputDecoration(
                 hintText: 'Longitude',
               ),
+            ),
+            IconButton(
+              icon: Icon(Icons.camera_front),
+              onPressed: () {
+                if (isNew) {
+                  helper.insertPlace(place).then((data) {
+                    place.id = data;
+                    MaterialPageRoute route = MaterialPageRoute(
+                      builder: (context) => CameraScreen(place),
+                    );
+                    Navigator.push(context, route);
+                  });
+                } else {
+                  MaterialPageRoute route = MaterialPageRoute(
+                    builder: (context) => CameraScreen(place),
+                  );
+                  Navigator.push(context, route);
+                }
+              },
             ),
             RaisedButton(
               child: Text('OK'),
