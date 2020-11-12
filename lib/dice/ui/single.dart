@@ -1,6 +1,7 @@
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import '../models/dice.dart';
+import 'knockout.dart';
 
 class Single extends StatefulWidget {
   @override
@@ -24,6 +25,17 @@ class _SingleState extends State<Single> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Single Dice'),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.fitness_center),
+            onPressed: () {
+              MaterialPageRoute route = MaterialPageRoute(
+                builder: (context) => KnockOutScreen(),
+              );
+              Navigator.push(context, route);
+            },
+          )
+        ],
       ),
       body: Center(
         child: Column(

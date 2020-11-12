@@ -27,7 +27,7 @@ class Dice {
 
   static Future wait3seconds() {
     return new Future.delayed(
-      const Duration(seconds: 3),
+      const Duration(seconds: 2),
       () {},
     );
   }
