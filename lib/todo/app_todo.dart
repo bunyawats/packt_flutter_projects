@@ -40,15 +40,19 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  FloatingActionButton buildAddTodoButton(BuildContext context, Todo todo) {
+  FloatingActionButton buildAddTodoButton(BuildContext context) {
     return FloatingActionButton(
       child: Icon(Icons.add),
       onPressed: () {
+        debugPrint('do FloatingActionButton onPressed');
+        final Todo todo = Todo('', '', '', 0);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => TodoScreen(todo, true),
           ),
+        ).then(
+          (value) => todoBloc.getTodoList(),
         );
       },
     );
@@ -78,6 +82,8 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) {
                     return TodoScreen(snapshot.data[index], false);
                   }),
+                ).then(
+                  (value) => todoBloc.getTodoList(),
                 );
               },
             ),
@@ -89,17 +95,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     debugPrint('do _HomePageState build');
-
-    Todo todo = Todo('', '', '', 0);
 
     todoBloc.getTodoList();
     List<Todo> todoList = todoBloc.todoList;
 
     return Scaffold(
       appBar: AppBar(title: Text('Todo List')),
-      floatingActionButton: buildAddTodoButton(context, todo),
+      floatingActionButton: buildAddTodoButton(context),
       body: Container(
         child: StreamBuilder<List<Todo>>(
           stream: todoBloc.todoStream,

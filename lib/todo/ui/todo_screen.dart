@@ -57,13 +57,7 @@ class TodoScreen extends StatelessWidget {
         onPressed: () {
           save(
             callBack: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomePage(),
-                ),
-                (Route<dynamic> route) => false,
-              );
+              Navigator.pop(context);
             },
           );
         },
