@@ -26,7 +26,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TodoBloc todoBloc;
-  List<Todo> todos;
+  List<Todo> todoList;
 
   @override
   void initState() {
@@ -90,15 +90,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Todo todo = Todo('', '', '', 0);
-    todos = todoBloc.todoList;
+    todoList = todoBloc.todoList;
 
     return Scaffold(
       appBar: AppBar(title: Text('Todo List')),
       floatingActionButton: buildAddTodoButton(context, todo),
       body: Container(
         child: StreamBuilder<List<Todo>>(
-          stream: todoBloc.todos,
-          initialData: todos,
+          stream: todoBloc.todoStream,
+          initialData: todoList,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             return buildTodoListView(snapshot);
           },

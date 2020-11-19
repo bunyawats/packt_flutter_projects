@@ -60,7 +60,7 @@ class TodoDb {
     await store.delete(_database);
   }
 
-  Future<List<Todo>> getTodos() async {
+  Future<List<Todo>> getTodoList() async {
     await database;
     final finder = Finder(sortOrders: [
       SortOrder('priority'),
@@ -81,9 +81,9 @@ class TodoDb {
 
   Future testData() async {
     await this.database;
-    List<Todo> todos = await this.getTodos();
+    List<Todo> todos = await this.getTodoList();
     await this.deleteAll();
-    todos = await this.getTodos();
+    todos = await this.getTodoList();
 
     await this.insertTodo(
       Todo('Call Donald', 'And tell him about Daisy', '02/02/2020', 1),
@@ -94,7 +94,7 @@ class TodoDb {
     await this.insertTodo(
       Todo('Go Running', '@12.00, with neighbours', '02/02/2020', 3),
     );
-    todos = await this.getTodos();
+    todos = await this.getTodoList();
 
     debugPrint('First insert');
     todos.forEach((Todo todo) {
@@ -109,7 +109,7 @@ class TodoDb {
     await this.deleteTodo(todoDelete);
 
     debugPrint('After Updates');
-    todos = await this.getTodos();
+    todos = await this.getTodoList();
     todos.forEach((Todo todo) {
       debugPrint(todo.name);
     });

@@ -18,9 +18,9 @@ class TodoBloc {
 
   TodoBloc() {
     db = TodoDb();
-    getTodos();
+    getTodoList();
 
-    _streamController.stream.listen(returnTodos);
+    _streamController.stream.listen(_listTodo);
     _insertController.stream.listen(_insertTodo);
     _updateController.stream.listen(_updateTodo);
     _deleteController.stream.listen(_deleteTodo);
@@ -30,17 +30,16 @@ class TodoBloc {
     this.callBack = callBack;
   }
 
-  Stream<List<Todo>> get todos => _streamController.stream;
-  StreamSink<List<Todo>> get returnTodoSink => _streamController.sink;
+  Stream<List<Todo>> get todoStream => _streamController.stream;
 
-  Future getTodos() async {
-    List<Todo> todos = await db.getTodos();
-    todoList = todos;
-    returnTodoSink.add(todos);
+  Future getTodoList() async {
+    todoList = await db.getTodoList();
+    debugPrint('after db.getTodoList');
+    _streamController.sink.add(todoList);
   }
 
-  List<Todo> returnTodos(List<Todo> todos) {
-    return todos;
+  List<Todo> _listTodo(List<Todo> todoList) {
+    return todoList;
   }
 
   void deleteTodo(Todo todo) {
@@ -49,8 +48,8 @@ class TodoBloc {
 
   void _deleteTodo(Todo todo) {
     db.deleteTodo(todo).then((result) {
-      debugPrint('after _deleteTodo');
-      getTodos();
+      debugPrint('after db.deleteTodo');
+      getTodoList();
     });
   }
 
@@ -60,8 +59,8 @@ class TodoBloc {
 
   void _updateTodo(Todo todo) {
     db.updateTodo(todo).then((result) async {
-      debugPrint('after _updateTodo');
-      await getTodos();
+      debugPrint('after db.updateTodo');
+      await getTodoList();
       this.callBack();
     });
   }
@@ -72,9 +71,8 @@ class TodoBloc {
 
   void _insertTodo(Todo todo) {
     db.insertTodo(todo).then((result) async {
-      debugPrint('after _addTodo XX');
-      await getTodos();
-
+      debugPrint('after db.insertTodo');
+      await getTodoList();
       this.callBack();
     });
   }
