@@ -40,61 +40,67 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  FloatingActionButton buildAddTodoButton(BuildContext context, Todo todo) {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => TodoScreen(todo, true),
+          ),
+        );
+      },
+    );
+  }
+
+  ListView buildTodoListView(AsyncSnapshot snapshot) {
+    return ListView.builder(
+      itemCount: (snapshot.hasData) ? snapshot.data.length : 0,
+      itemBuilder: (context, index) {
+        return Dismissible(
+          key: Key(snapshot.data[index].id.toString()),
+          onDismissed: (_) {
+            todoBloc.deleteTodoSink.add(snapshot.data[index]);
+          },
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Theme.of(context).highlightColor,
+              child: Text('${snapshot.data[index].priority}'),
+            ),
+            title: Text('${snapshot.data[index].name}'),
+            subtitle: Text('${snapshot.data[index].description}'),
+            trailing: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) {
+                    return TodoScreen(snapshot.data[index], false);
+                  }),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Todo todo = Todo('', '', '', 0);
     todos = todoBloc.todoList;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo List'),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TodoScreen(todo, true),
-            ),
-          );
-        },
-      ),
+      appBar: AppBar(title: Text('Todo List')),
+      floatingActionButton: buildAddTodoButton(context, todo),
       body: Container(
         child: StreamBuilder<List<Todo>>(
           stream: todoBloc.todos,
           initialData: todos,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            return ListView.builder(
-              itemCount: (snapshot.hasData) ? snapshot.data.length : 0,
-              itemBuilder: (context, index) {
-                return Dismissible(
-                  key: Key(snapshot.data[index].id.toString()),
-                  onDismissed: (_) {
-                    todoBloc.deleteTodoSink.add(snapshot.data[index]);
-                  },
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).highlightColor,
-                      child: Text('${snapshot.data[index].priority}'),
-                    ),
-                    title: Text('${snapshot.data[index].name}'),
-                    subtitle: Text('${snapshot.data[index].description}'),
-                    trailing: IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) {
-                            return TodoScreen(snapshot.data[index], false);
-                          }),
-                        );
-                      },
-                    ),
-                  ),
-                );
-              },
-            );
+            return buildTodoListView(snapshot);
           },
         ),
       ),

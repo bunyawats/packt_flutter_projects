@@ -79,9 +79,7 @@ class TodoScreen extends StatelessWidget {
     txtPriority.text = todo.priority.toString();
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo Details'),
-      ),
+      appBar: AppBar(title: Text('Todo Details')),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
