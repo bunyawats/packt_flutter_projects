@@ -11,27 +11,21 @@ class TodoBloc {
   Function callBack;
 
   final _streamController = StreamController<List<Todo>>.broadcast();
-  final _insertController = StreamController<Todo>();
-  final _updateController = StreamController<Todo>();
-  final _deleteController = StreamController<Todo>();
 
   Stream<List<Todo>> get todoStream => _streamController.stream;
 
   TodoBloc() {
     db = TodoDb();
-    getTodoList();
+    _getTodoList();
 
     _streamController.stream.listen(_listTodo);
-    _insertController.stream.listen(_insertTodo);
-    _updateController.stream.listen(_updateTodo);
-    _deleteController.stream.listen(_deleteTodo);
   }
 
   void setCallBack({Function callBack}) {
     this.callBack = callBack;
   }
 
-  Future getTodoList() async {
+  Future _getTodoList() async {
     var _todoList = await db.getTodoList();
     debugPrint('after db.getTodoList');
     _streamController.sink.add(_todoList);
@@ -41,45 +35,25 @@ class TodoBloc {
     this.todoList = todoList;
   }
 
-  void deleteTodo(Todo todo) {
-    _deleteController.sink.add(todo);
+  void deleteTodo(Todo todo) async {
+    await db.deleteTodo(todo);
+    debugPrint('after db.deleteTodo');
+    await _getTodoList();
   }
 
-  void _deleteTodo(Todo todo) {
-    db.deleteTodo(todo).then((result) {
-      debugPrint('after db.deleteTodo');
-      getTodoList();
-    });
+  void updateTodo(Todo todo) async {
+    await db.updateTodo(todo);
+    debugPrint('after db.updateTodo');
+    this.callBack();
   }
 
-  void updateTodo(Todo todo) {
-    _updateController.sink.add(todo);
-  }
-
-  void _updateTodo(Todo todo) {
-    db.updateTodo(todo).then((result) async {
-      debugPrint('after db.updateTodo');
-      await getTodoList();
-      this.callBack();
-    });
-  }
-
-  void insertTodo(Todo todo) {
-    _insertController.sink.add(todo);
-  }
-
-  void _insertTodo(Todo todo) {
-    db.insertTodo(todo).then((result) async {
-      debugPrint('after db.insertTodo');
-      await getTodoList();
-      this.callBack();
-    });
+  void insertTodo(Todo todo) async {
+    await db.insertTodo(todo);
+    debugPrint('after db.insertTodo');
+    this.callBack();
   }
 
   void dispose() {
     _streamController.close();
-    _insertController.close();
-    _updateController.close();
-    _deleteController.close();
   }
 }

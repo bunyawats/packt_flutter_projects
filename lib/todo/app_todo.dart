@@ -30,6 +30,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    debugPrint('do _HomePageState initState');
+
     todoBloc = TodoBloc();
     super.initState();
   }
