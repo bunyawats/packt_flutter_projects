@@ -8,13 +8,14 @@ import '../data/todo_db.dart';
 class TodoBloc {
   TodoDb db;
   List<Todo> todoList;
+  Function callBack;
 
   final _streamController = StreamController<List<Todo>>.broadcast();
   final _insertController = StreamController<Todo>();
   final _updateController = StreamController<Todo>();
   final _deleteController = StreamController<Todo>();
 
-  Function callBack;
+  Stream<List<Todo>> get todoStream => _streamController.stream;
 
   TodoBloc() {
     db = TodoDb();
@@ -25,12 +26,6 @@ class TodoBloc {
     _updateController.stream.listen(_updateTodo);
     _deleteController.stream.listen(_deleteTodo);
   }
-
-  void setCallBack({Function callBack}) {
-    this.callBack = callBack;
-  }
-
-  Stream<List<Todo>> get todoStream => _streamController.stream;
 
   Future getTodoList() async {
     todoList = await db.getTodoList();
@@ -82,5 +77,9 @@ class TodoBloc {
     _insertController.close();
     _updateController.close();
     _deleteController.close();
+  }
+
+  void setCallBack({Function callBack}) {
+    this.callBack = callBack;
   }
 }
