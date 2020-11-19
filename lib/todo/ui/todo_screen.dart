@@ -30,8 +30,6 @@ class TodoScreen extends StatelessWidget {
     } else {
       bloc.updateTodoSink.add(todo);
     }
-
-    //callBack(context);
   }
 
   void goHomeCallBack(BuildContext context) {
