@@ -14,8 +14,7 @@ class TodoBloc {
   final _updateController = StreamController<Todo>();
   final _deleteController = StreamController<Todo>();
 
-  Function(BuildContext) callBack;
-  BuildContext context;
+  Function callBack;
 
   TodoBloc() {
     db = TodoDb();
@@ -27,9 +26,8 @@ class TodoBloc {
     _deleteController.stream.listen(_deleteTodo);
   }
 
-  void setCallBack({Function(BuildContext) callBack, BuildContext context}){
+  void setCallBack({Function callBack}) {
     this.callBack = callBack;
-    this.context = context;
   }
 
   Stream<List<Todo>> get todos => _streamController.stream;
@@ -59,7 +57,7 @@ class TodoBloc {
     db.updateTodo(todo).then((result) async {
       debugPrint('after _updateTodo');
       await getTodos();
-      this.callBack(context);
+      this.callBack();
     });
   }
 
@@ -67,7 +65,8 @@ class TodoBloc {
     db.insertTodo(todo).then((result) async {
       debugPrint('after _addTodo XX');
       await getTodos();
-      this.callBack(context);
+
+      this.callBack();
     });
   }
 
