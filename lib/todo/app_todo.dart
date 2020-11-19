@@ -79,9 +79,10 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) {
-                    return TodoScreen(snapshot.data[index], false);
-                  }),
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        TodoScreen(snapshot.data[index], false),
+                  ),
                 ).then(
                   (value) => todoBloc.getTodoList(),
                 );
