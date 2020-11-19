@@ -28,13 +28,13 @@ class TodoBloc {
   }
 
   Future getTodoList() async {
-    todoList = await db.getTodoList();
+    var _todoList = await db.getTodoList();
     debugPrint('after db.getTodoList');
-    _streamController.sink.add(todoList);
+    _streamController.sink.add(_todoList);
   }
 
-  List<Todo> _listTodo(List<Todo> todoList) {
-    return todoList;
+  void _listTodo(List<Todo> todoList) {
+    this.todoList = todoList;
   }
 
   void deleteTodo(Todo todo) {
