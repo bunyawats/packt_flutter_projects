@@ -16,7 +16,7 @@ class TodoScreen extends StatelessWidget {
 
   TodoScreen(this.todo, this.isNew) : bloc = TodoBloc();
 
-  Future save() async {
+  Future save({Function(BuildContext) callBack, BuildContext context}) async {
     todo.name = txtName.text;
     todo.description = txtDescription.text;
     todo.completeBy = txtCompleteBy.text;
@@ -24,11 +24,26 @@ class TodoScreen extends StatelessWidget {
 
     debugPrint('save: $todo');
 
+    bloc.setCallBack(callBack: callBack, context: context);
     if (isNew) {
       bloc.insertTodoSink.add(todo);
     } else {
       bloc.updateTodoSink.add(todo);
     }
+
+    //callBack(context);
+  }
+
+  void goHomeCallBack(BuildContext context) {
+    print('Go Home Call Back');
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => HomePage(),
+      ),
+      (Route<dynamic> route) => false,
+    );
   }
 
   @override
@@ -92,13 +107,10 @@ class TodoScreen extends StatelessWidget {
                 color: Colors.green,
                 child: Text('Save'),
                 onPressed: () {
-                  save().then((_) => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ),
-                        (Route<dynamic> route) => false,
-                      ));
+                  save(
+                    callBack: goHomeCallBack,
+                    context: context,
+                  );
                 },
               ),
             ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 
 import '../data/todo.dart';
 import '../data/todo_db.dart';
@@ -13,6 +14,9 @@ class TodoBloc {
   final _updateController = StreamController<Todo>();
   final _deleteController = StreamController<Todo>();
 
+  Function(BuildContext) callBack;
+  BuildContext context;
+
   TodoBloc() {
     db = TodoDb();
     getTodos();
@@ -21,6 +25,11 @@ class TodoBloc {
     _insertController.stream.listen(_addTodo);
     _updateController.stream.listen(_updateTodo);
     _deleteController.stream.listen(_deleteTodo);
+  }
+
+  void setCallBack({Function(BuildContext) callBack, BuildContext context}){
+    this.callBack = callBack;
+    this.context = context;
   }
 
   Stream<List<Todo>> get todos => _streamController.stream;
@@ -47,16 +56,18 @@ class TodoBloc {
   }
 
   void _updateTodo(Todo todo) {
-    db.updateTodo(todo).then((result) {
+    db.updateTodo(todo).then((result) async {
       debugPrint('after _updateTodo');
-      getTodos();
+      await getTodos();
+      this.callBack(context);
     });
   }
 
   void _addTodo(Todo todo) {
-    db.insertTodo(todo).then((result) {
+    db.insertTodo(todo).then((result) async {
       debugPrint('after _addTodo XX');
-      getTodos();
+      await getTodos();
+      this.callBack(context);
     });
   }
 
