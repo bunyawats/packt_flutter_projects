@@ -27,6 +27,10 @@ class TodoBloc {
     _deleteController.stream.listen(_deleteTodo);
   }
 
+  void setCallBack({Function callBack}) {
+    this.callBack = callBack;
+  }
+
   Future getTodoList() async {
     var _todoList = await db.getTodoList();
     debugPrint('after db.getTodoList');
@@ -77,9 +81,5 @@ class TodoBloc {
     _insertController.close();
     _updateController.close();
     _deleteController.close();
-  }
-
-  void setCallBack({Function callBack}) {
-    this.callBack = callBack;
   }
 }
