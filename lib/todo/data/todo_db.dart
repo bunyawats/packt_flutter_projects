@@ -23,6 +23,7 @@ class TodoDb {
       await _openDb().then((db) {
         _database = db;
       });
+      // await this.deleteAll();
     }
     return _database;
   }
@@ -76,5 +77,41 @@ class TodoDb {
       todo.id = snapshot.key;
       return todo;
     }).toList();
+  }
+
+  Future testData() async {
+    await this.database;
+    List<Todo> todos = await this.getTodos();
+    await this.deleteAll();
+    todos = await this.getTodos();
+
+    await this.insertTodo(
+      Todo('Call Donald', 'And tell him about Daisy', '02/02/2020', 1),
+    );
+    await this.insertTodo(
+      Todo('Buy Sugar', '1 Kg, brown', '02/02/2020', 2),
+    );
+    await this.insertTodo(
+      Todo('Go Running', '@12.00, with neighbours', '02/02/2020', 3),
+    );
+    todos = await this.getTodos();
+
+    debugPrint('First insert');
+    todos.forEach((Todo todo) {
+      debugPrint(todo.name);
+    });
+
+    Todo todoToUpdate = todos[0];
+    todoToUpdate.name = 'Call Tim';
+    await this.updateTodo(todoToUpdate);
+
+    Todo todoDelete = todos[1];
+    await this.deleteTodo(todoDelete);
+
+    debugPrint('After Updates');
+    todos = await this.getTodos();
+    todos.forEach((Todo todo) {
+      debugPrint(todo.name);
+    });
   }
 }

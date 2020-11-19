@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'data/todo_db.dart';
 import 'data/todo.dart';
+import 'bloc/todo_bloc.dart';
+import 'ui/todo_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -24,46 +25,79 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future _testData() async {
-    TodoDb db = TodoDb();
-    await db.database;
-    List<Todo> todos = await db.getTodos();
-    await db.deleteAll();
-    todos = await db.getTodos();
+  TodoBloc todoBloc;
+  List<Todo> todos;
 
-    await db.insertTodo(
-      Todo('Call Donald', 'And tell him about Daisy', '02/02/2020', 1),
-    );
-    await db.insertTodo(
-      Todo('Buy Sugar', '1 Kg, brown', '02/02/2020', 2),
-    );
-    await db.insertTodo(
-      Todo('Go Running', '@12.00, with neighbours', '02/02/2020', 3),
-    );
-    todos = await db.getTodos();
+  @override
+  void initState() {
+    todoBloc = TodoBloc();
+    super.initState();
+  }
 
-    debugPrint('First insert');
-    todos.forEach((Todo todo) {
-      debugPrint(todo.name);
-    });
-
-    Todo todoToUpdate = todos[0];
-    todoToUpdate.name = 'Call Tim';
-    await db.updateTodo(todoToUpdate);
-
-    Todo todoDelete = todos[1];
-    await db.deleteTodo(todoDelete);
-
-    debugPrint('After Updates');
-    todos = await db.getTodos();
-    todos.forEach((Todo todo) {
-      debugPrint(todo.name);
-    });
+  @override
+  void dispose() {
+    todoBloc.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _testData();
-    return Container();
+    Todo todo = Todo('', '', '', 0);
+    todos = todoBloc.todoList;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Todo List'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TodoScreen(todo, true),
+            ),
+          );
+        },
+      ),
+      body: Container(
+        child: StreamBuilder<List<Todo>>(
+          stream: todoBloc.todos,
+          initialData: todos,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            return ListView.builder(
+              itemCount: (snapshot.hasData) ? snapshot.data.length : 0,
+              itemBuilder: (context, index) {
+                return Dismissible(
+                  key: Key(snapshot.data[index].id.toString()),
+                  onDismissed: (_) {
+                    todoBloc.deleteTodoSink.add(snapshot.data[index]);
+                  },
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).highlightColor,
+                      child: Text('${snapshot.data[index].priority}'),
+                    ),
+                    title: Text('${snapshot.data[index].name}'),
+                    subtitle: Text('${snapshot.data[index].description}'),
+                    trailing: IconButton(
+                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) {
+                            return TodoScreen(snapshot.data[index], false);
+                          }),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
   }
 }

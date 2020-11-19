@@ -24,4 +24,9 @@ class Todo {
       map['priority'],
     );
   }
+
+  @override
+  String toString() {
+    return toMap().toString();
+  }
 }

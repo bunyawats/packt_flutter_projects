@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
+
 import '../data/todo.dart';
 import '../data/todo_db.dart';
 
@@ -6,38 +8,31 @@ class TodoBloc {
   TodoDb db;
   List<Todo> todoList;
 
-  final _todoStreamController = StreamController<List<Todo>>.broadcast();
-  final _todoInsertController = StreamController<Todo>();
-  final _todoUpdateController = StreamController<Todo>();
-  final _todoDeleteController = StreamController<Todo>();
-
-  Stream<List<Todo>> get todos => _todoStreamController.stream;
-  StreamSink<List<Todo>> get todoSink => _todoStreamController.sink;
-  StreamSink<Todo> get todoInsertSink => _todoInsertController.sink;
-  StreamSink<Todo> get todoUpdateSink => _todoUpdateController.sink;
-  StreamSink<Todo> get todoDeleteSink => _todoInsertController.sink;
+  final _streamController = StreamController<List<Todo>>.broadcast();
+  final _insertController = StreamController<Todo>();
+  final _updateController = StreamController<Todo>();
+  final _deleteController = StreamController<Todo>();
 
   TodoBloc() {
     db = TodoDb();
     getTodos();
 
-    _todoStreamController.stream.listen(returnTodos);
-    _todoInsertController.stream.listen(_addTodo);
-    _todoUpdateController.stream.listen(_updateTodo);
-    _todoDeleteController.stream.listen(_deleteTodo);
+    _streamController.stream.listen(returnTodos);
+    _insertController.stream.listen(_addTodo);
+    _updateController.stream.listen(_updateTodo);
+    _deleteController.stream.listen(_deleteTodo);
   }
 
-  void dispose() {
-    _todoStreamController.close();
-    _todoInsertController.close();
-    _todoUpdateController.close();
-    _todoDeleteController.close();
-  }
+  Stream<List<Todo>> get todos => _streamController.stream;
+  StreamSink<List<Todo>> get returnTodoSink => _streamController.sink;
+  StreamSink<Todo> get insertTodoSink => _insertController.sink;
+  StreamSink<Todo> get updateTodoSink => _updateController.sink;
+  StreamSink<Todo> get deleteTodoSink => _deleteController.sink;
 
   Future getTodos() async {
     List<Todo> todos = await db.getTodos();
     todoList = todos;
-    todoSink.add(todos);
+    returnTodoSink.add(todos);
   }
 
   List<Todo> returnTodos(List<Todo> todos) {
@@ -46,19 +41,29 @@ class TodoBloc {
 
   void _deleteTodo(Todo todo) {
     db.deleteTodo(todo).then((result) {
+      debugPrint('after _deleteTodo');
       getTodos();
     });
   }
 
   void _updateTodo(Todo todo) {
     db.updateTodo(todo).then((result) {
+      debugPrint('after _updateTodo');
       getTodos();
     });
   }
 
   void _addTodo(Todo todo) {
     db.insertTodo(todo).then((result) {
+      debugPrint('after _addTodo XX');
       getTodos();
     });
+  }
+
+  void dispose() {
+    _streamController.close();
+    _insertController.close();
+    _updateController.close();
+    _deleteController.close();
   }
 }
