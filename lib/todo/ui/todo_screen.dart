@@ -16,6 +16,22 @@ class TodoScreen extends StatelessWidget {
 
   TodoScreen(this.todo, this.isNew) : bloc = TodoBloc();
 
+  Padding buildTextField(
+    TextEditingController textField,
+    String label,
+  ) {
+    return Padding(
+      padding: EdgeInsets.all(20.0),
+      child: TextField(
+        controller: textField,
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          hintText: label,
+        ),
+      ),
+    );
+  }
+
   Future save({Function callBack}) async {
     todo.name = txtName.text;
     todo.description = txtDescription.text;
@@ -32,9 +48,31 @@ class TodoScreen extends StatelessWidget {
     }
   }
 
+  Padding buildSaveButton(BuildContext context, String label) {
+    return Padding(
+      padding: EdgeInsets.all(20.0),
+      child: MaterialButton(
+        color: Colors.green,
+        child: Text(label),
+        onPressed: () {
+          save(
+            callBack: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+                (Route<dynamic> route) => false,
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final double padding = 20.0;
     txtName.text = todo.name;
     txtDescription.text = todo.description;
     txtCompleteBy.text = todo.completeBy;
@@ -47,66 +85,11 @@ class TodoScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: EdgeInsets.all(padding),
-              child: TextField(
-                controller: txtName,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Name',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(padding),
-              child: TextField(
-                controller: txtDescription,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Description',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(padding),
-              child: TextField(
-                controller: txtCompleteBy,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Complete by',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(padding),
-              child: TextField(
-                controller: txtPriority,
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Priority',
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(padding),
-              child: MaterialButton(
-                color: Colors.green,
-                child: Text('Save'),
-                onPressed: () {
-                  save(
-                    callBack: () {
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => HomePage(),
-                        ),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
+            buildTextField(txtName, 'Name'),
+            buildTextField(txtDescription, 'Description'),
+            buildTextField(txtCompleteBy, 'Complete by'),
+            buildTextField(txtPriority, 'Priority'),
+            buildSaveButton(context, 'Save'),
           ],
         ),
       ),
