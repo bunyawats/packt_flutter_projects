@@ -42,9 +42,9 @@ class TodoScreen extends StatelessWidget {
 
     bloc.setCallBack(callBack: callBack);
     if (isNew) {
-      bloc.insertTodoSink.add(todo);
+      bloc.insertTodo(todo);
     } else {
-      bloc.updateTodoSink.add(todo);
+      bloc.updateTodo(todo);
     }
   }
 

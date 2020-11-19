@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
         return Dismissible(
           key: Key(snapshot.data[index].id.toString()),
           onDismissed: (_) {
-            todoBloc.deleteTodoSink.add(snapshot.data[index]);
+            todoBloc.deleteTodo(snapshot.data[index]);
           },
           child: ListTile(
             leading: CircleAvatar(
