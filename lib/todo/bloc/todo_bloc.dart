@@ -16,8 +16,6 @@ class TodoBloc {
 
   TodoBloc() {
     db = TodoDb();
-    _getTodoList();
-
     _streamController.stream.listen(_listTodo);
   }
 
@@ -25,7 +23,7 @@ class TodoBloc {
     this.callBack = callBack;
   }
 
-  Future _getTodoList() async {
+  Future getTodoList() async {
     var _todoList = await db.getTodoList();
     debugPrint('after db.getTodoList');
     _streamController.sink.add(_todoList);
@@ -38,7 +36,7 @@ class TodoBloc {
   void deleteTodo(Todo todo) async {
     await db.deleteTodo(todo);
     debugPrint('after db.deleteTodo');
-    await _getTodoList();
+    await getTodoList();
   }
 
   void updateTodo(Todo todo) async {

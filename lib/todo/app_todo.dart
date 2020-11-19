@@ -26,12 +26,10 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TodoBloc todoBloc;
-  List<Todo> todoList;
 
   @override
   void initState() {
     debugPrint('do _HomePageState initState');
-
     todoBloc = TodoBloc();
     super.initState();
   }
@@ -91,8 +89,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    debugPrint('do _HomePageState build');
+
     Todo todo = Todo('', '', '', 0);
-    todoList = todoBloc.todoList;
+
+    todoBloc.getTodoList();
+    List<Todo> todoList = todoBloc.todoList;
 
     return Scaffold(
       appBar: AppBar(title: Text('Todo List')),
