@@ -154,10 +154,10 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  _readSetting() async {
-    workTime = TimerHelper.getWorkTime();
-    shortBreak = TimerHelper.getShortBreak();
-    longBreak = TimerHelper.getLongBreak();
+  _readSetting()  async {
+    workTime = await TimerHelper.getWorkTime();
+    shortBreak = await TimerHelper.getShortBreak();
+    longBreak = await TimerHelper.getLongBreak();
 
     setState(() {
       txWork.text = workTime.toString();
@@ -166,16 +166,16 @@ class _SettingsState extends State<Settings> {
     });
   }
 
-  void updateSetting(String key, int value) {
+  void updateSetting(String key, int value) async {
     print("key: $key, value: $value");
 
     switch (key) {
       case TimerHelper.WORK_TIME:
         {
-          workTime = TimerHelper.getWorkTime();
+          workTime = await TimerHelper.getWorkTime();
           workTime += value;
           if (workTime >= 1 && workTime <= 180) {
-            TimerHelper.setWorkTime(workTime);
+            await TimerHelper.setWorkTime(workTime);
             setState(() {
               txWork.text = workTime.toString();
             });
@@ -184,10 +184,10 @@ class _SettingsState extends State<Settings> {
         break;
       case TimerHelper.SHORT_BREAK:
         {
-          shortBreak = TimerHelper.getShortBreak();
+          shortBreak = await TimerHelper.getShortBreak();
           shortBreak += value;
           if (shortBreak >= 1 && shortBreak <= 120) {
-            TimerHelper.setShortBreak(shortBreak);
+            await TimerHelper.setShortBreak(shortBreak);
             setState(() {
               txShort.text = shortBreak.toString();
             });
@@ -196,10 +196,10 @@ class _SettingsState extends State<Settings> {
         break;
       case TimerHelper.LONG_BREAK:
         {
-          longBreak = TimerHelper.getLongBreak();
+          longBreak = await TimerHelper.getLongBreak();
           longBreak += value;
           if (longBreak >= 1 && longBreak <= 180) {
-            TimerHelper.setLongBreak(longBreak);
+            await TimerHelper.setLongBreak(longBreak);
             setState(() {
               txLong.text = longBreak.toString();
             });

@@ -73,9 +73,9 @@ class CountDownTimer {
     _fullTime = _time;
   }
 
-  readSettings() {
-    workTime = TimerHelper.getWorkTime();
-    shortBreak = TimerHelper.getShortBreak();
-    longBreak = TimerHelper.getLongBreak();
+  readSettings() async {
+    workTime = await TimerHelper.getWorkTime();
+    shortBreak = await TimerHelper.getShortBreak();
+    longBreak = await TimerHelper.getLongBreak();
   }
 }
