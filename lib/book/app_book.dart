@@ -105,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Padding(
               padding: EdgeInsets.all(20.0),
-              child: BookTable(books, false),
+              child: isSmall ? BookList(books, false) : BookTable(books, false),
             )
           ],
         ),

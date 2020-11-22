@@ -67,3 +67,38 @@ class TableText extends StatelessWidget {
     );
   }
 }
+
+class BookList extends StatelessWidget {
+  final List<Book> books;
+  final bool isFavorite;
+
+  BookList(this.books, this.isFavorite);
+  final helper = BookHelper();
+
+  @override
+  Widget build(BuildContext context) {
+    final int bookCount = books.length;
+    final double height = MediaQuery.of(context).size.height / 1.4;
+
+    return Container(
+      height: height,
+      child: ListView.builder(
+        itemCount: bookCount,
+        itemBuilder: (BuildContext context, int position) {
+          Book book = books[position];
+          return ListTile(
+            title: Text(book.title),
+            subtitle: Text(book.authors),
+            trailing: IconButton(
+              icon: Icon(Icons.star),
+              color: isFavorite ? Colors.red : Colors.amber,
+              tooltip:
+                  isFavorite ? 'Remove from favorites' : 'Add from favorites',
+              onPressed: () {},
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
