@@ -42,7 +42,13 @@ class BookTable extends StatelessWidget {
             color: isFavorite ? Colors.red : Colors.amber,
             tooltip: isFavorite ? 'Remove form favorite' : 'Add to favorite',
             icon: Icon(Icons.star),
-            onPressed: () {},
+            onPressed: () {
+              if (isFavorite) {
+                helper.removeFromFavorites(book, context);
+              } else {
+                helper.addToFavorites(book);
+              }
+            },
           ),
         ),
       ]);
@@ -94,7 +100,13 @@ class BookList extends StatelessWidget {
               color: isFavorite ? Colors.red : Colors.amber,
               tooltip:
                   isFavorite ? 'Remove from favorites' : 'Add from favorites',
-              onPressed: () {},
+              onPressed: () {
+                if (isFavorite) {
+                  helper.removeFromFavorites(book, context);
+                } else {
+                  helper.addToFavorites(book);
+                }
+              },
             ),
           );
         },

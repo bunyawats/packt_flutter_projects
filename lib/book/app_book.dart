@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'data/book_helper.dart';
 import 'data/book.dart';
 import 'ui/ui.dart';
+import 'ui/favorite_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -64,6 +65,14 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.all(20.0),
               child: isSmall ? Icon(Icons.star) : Text('Favorites'),
             ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FavoriteScreen(),
+                ),
+              );
+            },
           ),
         ],
       ),
