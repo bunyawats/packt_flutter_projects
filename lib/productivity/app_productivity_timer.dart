@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-import 'setting.dart';
-import 'timer_model.dart';
-import 'widgets.dart';
-import 'timer.dart';
+import 'ui/setting.dart';
+import 'model/timer_model.dart';
+import 'ui/widgets.dart';
+import 'util/count_down_timer.dart';
 
 void main() => runApp(ProductivityApp());
 

@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'package:webstorage/webstorage.dart';
-import 'timer_model.dart';
+import 'timer_helper.dart';
+import '../model/timer_model.dart';
 
 class CountDownTimer {
   double _radius = 1;
@@ -10,15 +10,9 @@ class CountDownTimer {
 
   Timer timer;
 
-  int work = 30;
+  int workTime = 30;
   int shortBreak = 5;
   int longBreak = 20;
-
-  static const String WORKTIME = "workTime";
-  static const String SHORTBREAK = "shortBreak";
-  static const String LONGBREAK = "longBreak";
-
-  final service = LocalStorage();
 
   String returnTime(Duration t) {
     String minutes = (t.inMinutes < 10)
@@ -56,7 +50,7 @@ class CountDownTimer {
   void startWork() async {
     await readSettings();
     _radius = 1;
-    _time = Duration(minutes: this.work, seconds: 0);
+    _time = Duration(minutes: this.workTime, seconds: 0);
     _fullTime = _time;
   }
 
@@ -80,8 +74,8 @@ class CountDownTimer {
   }
 
   readSettings() {
-    work = int.tryParse(service.get(WORKTIME));
-    shortBreak = int.tryParse(service.get(SHORTBREAK));
-    longBreak = int.tryParse(service.get(LONGBREAK));
+    workTime = TimerHelper.getWorkTime();
+    shortBreak = TimerHelper.getShortBreak();
+    longBreak = TimerHelper.getLongBreak();
   }
 }

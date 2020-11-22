@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:webstorage/webstorage.dart';
-import 'package:hello_world/productivity/widgets.dart';
+import '../util/timer_helper.dart';
+import 'package:hello_world/productivity/ui/widgets.dart';
 
 class SettingScreen extends StatelessWidget {
   @override
@@ -25,17 +25,11 @@ class _SettingsState extends State<Settings> {
   TextEditingController txShort;
   TextEditingController txLong;
 
-  static const String WORKTIME = "workTime";
-  static const String SHORTBREAK = "shortBreak";
-  static const String LONGBREAK = "longBreak";
-
   final double buttonSize = 20.0;
 
   int workTime = 30;
   int shortBreak = 5;
   int longBreak = 20;
-
-  final service = LocalStorage();
 
   TextStyle textStyle = TextStyle(
     fontSize: 24,
@@ -72,7 +66,7 @@ class _SettingsState extends State<Settings> {
             text: "-",
             value: -1,
             size: buttonSize,
-            setting: WORKTIME,
+            setting: TimerHelper.WORK_TIME,
             callback: updateSetting,
           ),
           TextField(
@@ -89,7 +83,7 @@ class _SettingsState extends State<Settings> {
             text: "+",
             value: 1,
             size: buttonSize,
-            setting: WORKTIME,
+            setting: TimerHelper.WORK_TIME,
             callback: updateSetting,
           ),
           Text(
@@ -103,7 +97,7 @@ class _SettingsState extends State<Settings> {
             text: "-",
             value: -1,
             size: buttonSize,
-            setting: SHORTBREAK,
+            setting: TimerHelper.SHORT_BREAK,
             callback: updateSetting,
           ),
           TextField(
@@ -120,7 +114,7 @@ class _SettingsState extends State<Settings> {
             text: "+",
             value: 1,
             size: buttonSize,
-            setting: SHORTBREAK,
+            setting: TimerHelper.SHORT_BREAK,
             callback: updateSetting,
           ),
           Text(
@@ -134,7 +128,7 @@ class _SettingsState extends State<Settings> {
             text: "-",
             value: -1,
             size: buttonSize,
-            setting: LONGBREAK,
+            setting: TimerHelper.LONG_BREAK,
             callback: updateSetting,
           ),
           TextField(
@@ -151,7 +145,7 @@ class _SettingsState extends State<Settings> {
             text: "+",
             value: 1,
             size: buttonSize,
-            setting: LONGBREAK,
+            setting: TimerHelper.LONG_BREAK,
             callback: updateSetting,
           ),
         ],
@@ -161,23 +155,9 @@ class _SettingsState extends State<Settings> {
   }
 
   _readSetting() async {
-    print("call _readSetting");
-    workTime = int.tryParse(service.get(WORKTIME));
-    print('workTime from local store : $workTime');
-    if (workTime == null) {
-      workTime = 40;
-      service.set(WORKTIME, workTime.toString());
-    }
-    shortBreak = int.tryParse(service.get(SHORTBREAK));
-    if (shortBreak == null) {
-      shortBreak = 5;
-      service.set(SHORTBREAK, shortBreak.toString());
-    }
-    longBreak = int.tryParse(service.get(LONGBREAK));
-    if (longBreak == null) {
-      longBreak = 20;
-      service.set(LONGBREAK, longBreak.toString());
-    }
+    workTime = TimerHelper.getWorkTime();
+    shortBreak = TimerHelper.getShortBreak();
+    longBreak = TimerHelper.getLongBreak();
 
     setState(() {
       txWork.text = workTime.toString();
@@ -190,36 +170,36 @@ class _SettingsState extends State<Settings> {
     print("key: $key, value: $value");
 
     switch (key) {
-      case WORKTIME:
+      case TimerHelper.WORK_TIME:
         {
-          workTime = int.tryParse(service.get(WORKTIME));
+          workTime = TimerHelper.getWorkTime();
           workTime += value;
           if (workTime >= 1 && workTime <= 180) {
-            service.set(WORKTIME, workTime.toString());
+            TimerHelper.setWorkTime(workTime);
             setState(() {
               txWork.text = workTime.toString();
             });
           }
         }
         break;
-      case SHORTBREAK:
+      case TimerHelper.SHORT_BREAK:
         {
-          shortBreak = int.tryParse(service.get(SHORTBREAK));
+          shortBreak = TimerHelper.getShortBreak();
           shortBreak += value;
           if (shortBreak >= 1 && shortBreak <= 120) {
-            service.set(SHORTBREAK, shortBreak.toString());
+            TimerHelper.setShortBreak(shortBreak);
             setState(() {
               txShort.text = shortBreak.toString();
             });
           }
         }
         break;
-      case LONGBREAK:
+      case TimerHelper.LONG_BREAK:
         {
-          longBreak = int.tryParse(service.get(LONGBREAK));
+          longBreak = TimerHelper.getLongBreak();
           longBreak += value;
           if (longBreak >= 1 && longBreak <= 180) {
-            service.set(LONGBREAK, longBreak.toString());
+            TimerHelper.setLongBreak(longBreak);
             setState(() {
               txLong.text = longBreak.toString();
             });
