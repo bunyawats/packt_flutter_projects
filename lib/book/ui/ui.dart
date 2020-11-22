@@ -3,7 +3,7 @@ import '../data/book_helper.dart';
 import '../data/book.dart';
 
 class BookTable extends StatelessWidget {
-  final List<dynamic> books;
+  final List<Book> books;
   final bool isFavorite;
 
   BookTable(this.books, this.isFavorite);

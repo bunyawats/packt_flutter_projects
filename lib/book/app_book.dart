@@ -25,7 +25,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   BookHelper helper;
-  List<dynamic> books = List<dynamic>();
+  List<Book> books = List<Book>();
   int bookCount;
   TextEditingController txtSearchController;
 

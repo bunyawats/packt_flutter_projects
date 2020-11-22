@@ -11,20 +11,20 @@ class BookHelper {
   final String urlQuery = 'volumes?q=';
   final String urlBase = 'https://www.googleapis.com/books/v1/';
 
-  Future<List<dynamic>> getBook(String query) async {
-    final String url = urlBase + urlQuery + query + urlKey ;
+  Future<List<Book>> getBook(String query) async {
+    final String url = urlBase + urlQuery + query + urlKey;
 
     Response result = await http.get(url);
 
     if (result.statusCode == 200) {
       final jsonResponse = json.decode(result.body);
       final bookMap = jsonResponse['items'];
-      List<dynamic> books = bookMap
+      final books = bookMap
           .map(
             (item) => Book.fromJson(item),
           )
           .toList();
-      return books;
+      return books.cast<Book>();
     } else {
       return null;
     }

@@ -25,9 +25,9 @@ class Book {
     final String description = volumeInfo['description'] == null
         ? ''
         : volumeInfo['description'].toString();
-    final String publisher = volumeInfo['publishers'] == null
+    final String publisher = volumeInfo['publisher'] == null
         ? ''
-        : volumeInfo['publishers'].toString();
+        : volumeInfo['publisher'].toString();
 
     return Book(
       id,
